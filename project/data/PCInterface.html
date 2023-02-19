@@ -33,7 +33,7 @@
         }
 
         function toggleDarkMode() {
-            if(getCookie("darkMode") == "false")
+            if(document.getElementById("darkmode-toggle").ariaChecked == "false")
             {
                 setCookie("darkMode", "true")
             } else {
@@ -44,39 +44,13 @@
         }
 
         function updatePageDarkMode() {
-
             if(getCookie("darkMode") == "true")
             {
-                r.style.setProperty('--color1', '#261627');
-                r.style.setProperty('--color2', '#123059');
-                r.style.setProperty('--color3', '#123059');
-                r.style.setProperty('--color4', '#261627');
-                r.style.setProperty('--color5', '#242424');
-                r.style.setProperty('--textColor', '#F0F0F0');
-                r.style.setProperty('--background-color', '#242429');
-                r.style.setProperty('--outdent-shadow', '-5px -5px 8px rgba(51, 51, 76, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(51, 51, 76, 0), inset -2px -2px 0px rgba(0, 0, 0, 0)');
-                r.style.setProperty('--outdent-shadow', '-5px -5px 8px rgba(51, 51, 76, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(51, 51, 76, 0), inset -2px -2px 0px rgba(0, 0, 0, 0)');
-                r.style.setProperty('--outdent-hover-shadow', '-8px -8px 8px rgba(51, 51, 76, 1), 8px 8px 10px rgba(0, 0, 0, 0.3)');
-                r.style.setProperty('--outdent-active-shadow', '-1px -1px 4px rgba(51, 51, 76, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(51, 51, 76, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3)');
-                r.style.setProperty('--indent-shadow', '1px 1px 4px rgba(51, 51, 76, 0), -1px -1px 4px rgba(0, 0, 0, 0), inset -4px -4px 6px rgba(51, 51, 76, 1), inset 4px 4px 6px rgba(0, 0, 0, 0.3)');
-                r.style.setProperty('--oliver-active-shadow', '-5px -5px 8px rgba(51, 51, 76, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(51, 51, 76, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3)');
-                r.style.setProperty('--slider-thumb-shadow', '-5px -5px 8px rgba(51, 51, 76, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(51, 51, 76, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3)');
+                document.body.classList.add("dark-mode");
             }
             else if(getCookie("darkMode") == "false")
             {
-                r.style.setProperty('--color1', '#6DD3CE');
-                r.style.setProperty('--color2', '#C8E9A0');
-                r.style.setProperty('--color3', '#F7A278');
-                r.style.setProperty('--color4', '#A13D63');
-                r.style.setProperty('--color5', '#351E29');
-                r.style.setProperty('--textColor', '#001f3f');
-                r.style.setProperty('--background-color', '#F0F0F0');
-                r.style.setProperty('--outdent-shadow', '-5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(255, 255, 255, 0), inset -2px -2px 0px rgba(0, 0, 0, 0)');
-                r.style.setProperty('--outdent-hover-shadow', '-8px -8px 8px rgba(255, 255, 255, 1), 8px 8px 10px rgba(0, 0, 0, 0.3)');
-                r.style.setProperty('--outdent-active-shadow', '-1px -1px 4px rgba(255, 255, 255, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(255, 255, 255, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3)');
-                r.style.setProperty('--indent-shadow', '1px 1px 4px rgba(255, 255, 255, 0), -1px -1px 4px rgba(0, 0, 0, 0), inset -4px -4px 6px rgba(255, 255, 255, 1), inset 4px 4px 6px rgba(0, 0, 0, 0.3)');
-                r.style.setProperty('--oliver-active-shadow', '-5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(255, 255, 255, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3)');
-                r.style.setProperty('--slider-thumb-shadow', '-5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(255, 255, 255, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3)');
+                document.body.classList.remove("dark-mode");
             }
         }
 
@@ -84,10 +58,8 @@
     </script>
     <style>
         
-        /* * {
-        } */
         /* Variables, they do exist */
-    :root {
+    body {
         --color1: #6DD3CE;
         --color2: #C8E9A0;
         --color3: #F7A278;
@@ -99,13 +71,31 @@
         --outdent-active-shadow: -1px -1px 4px rgba(255, 255, 255, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(255, 255, 255, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
         --indent-shadow: 1px 1px 4px rgba(255, 255, 255, 0), -1px -1px 4px rgba(0, 0, 0, 0), inset -4px -4px 6px rgba(255, 255, 255, 1), inset 4px 4px 6px rgba(0, 0, 0, 0.3);
         --oliver-active-shadow: -5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(255, 255, 255, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3);
+        /* Bad thumb */
+        --slider-thumb-shadow: -5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(255, 255, 255, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3);
         /* Round thumb: */
         /* --slider-thumb-shadow: inset .4em .4em 5px -8px rgba(255, 255, 255, .5), inset -.4em -.4em 10px -3px rgba(0, 0, 0, 0.3), 0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.3), -1px -1px 2px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(0, 0, 0, 0.3); */
         /* Flat thumb: */
-        --slider-thumb-shadow: -2px -2px 8px rgba(255, 255, 255, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.4), inset 2px 2px 0px rgba(255, 255, 255, 0), inset -2px -2px 0px rgba(0, 0, 0, 0);
+        /* --slider-thumb-shadow: -2px -2px 8px rgba(255, 255, 255, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.4), inset 2px 2px 0px rgba(255, 255, 255, 0), inset -2px -2px 0px rgba(0, 0, 0, 0); */
         --background-color: #F0F0F0;
         --transition-duration: 250ms;
         --margin: 15px;
+    }
+    body.dark-mode {
+        --color1: #261627;
+        --color2: #123059;
+        --color3: #123059;
+        --color4: #261627;
+        --color5: #242424;
+        --textColor: #F0F0F0;
+        --background-color: #242429;
+        --outdent-shadow: -5px -5px 8px rgba(51, 51, 76, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(51, 51, 76, 0), inset -2px -2px 0px rgba(0, 0, 0, 0);
+        --outdent-shadow: -5px -5px 8px rgba(51, 51, 76, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(51, 51, 76, 0), inset -2px -2px 0px rgba(0, 0, 0, 0);
+        --outdent-hover-shadow: -8px -8px 8px rgba(51, 51, 76, 1), 8px 8px 10px rgba(0, 0, 0, 0.3);
+        --outdent-active-shadow: -1px -1px 4px rgba(51, 51, 76, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(51, 51, 76, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+        --indent-shadow: 1px 1px 4px rgba(51, 51, 76, 0), -1px -1px 4px rgba(0, 0, 0, 0), inset -4px -4px 6px rgba(51, 51, 76, 1), inset 4px 4px 6px rgba(0, 0, 0, 0.3);
+        --oliver-active-shadow: -5px -5px 8px rgba(51, 51, 76, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(51, 51, 76, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3);
+        --slider-thumb-shadow: -5px -5px 8px rgba(51, 51, 76, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(51, 51, 76, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3);
     }
     body{
         font-family: 'Muli';
