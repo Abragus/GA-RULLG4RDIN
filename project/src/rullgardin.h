@@ -17,8 +17,8 @@
     #define RESET_PIN 33
     #define MOTOR_INTERFACE_TYPE 1
 #elif defined(V1)
-    #define DIR_PIN 32
-    #define STEP_PIN 33
+    #define DIR_PIN 33
+    #define STEP_PIN 32
     #define ENABLE_PIN 25
     #define RESET_PIN 26
     #define MOTOR_INTERFACE_TYPE 1
