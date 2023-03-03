@@ -55,7 +55,7 @@ const char* password[] = WIFI_PASSWORD;
 const char* id[] = WIFI_ID;
 
 /*** Config ***/
-const uint8_t wifi_connect_seconds_timeout_per_network = 10; // Seconds
+const uint8_t wifi_connect_seconds_timeout_per_network = 4; // Seconds
 const uint8_t wifi_scan_tries = 2; // How many scans it should do before giving up
 const uint8_t wifi_scan_delay_seconds = 5; // How long to wait between scans
 
@@ -422,6 +422,7 @@ String SendHTML(){
 
   // If HTML file successfully loaded, return it 
   if (html_string != "")
+    html_string.replace("___serverip___", WiFi.localIP().toString());
     return html_string;
   
   // Default HTML page, "relic"-ish, useful for when file loading failed
