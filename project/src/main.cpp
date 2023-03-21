@@ -18,7 +18,7 @@
 
 #include <ArduinoJson.h>
 
-#include "multiLog.h"
+#include <multiLog.h>
 /* Network credentials are stored in network_credentials.h, enter them there */
 //-- Network related --//
 #include <WiFi.h>
@@ -66,8 +66,6 @@ const uint8_t wifi_scan_delay_seconds = 5; // How long to wait between scans
 AsyncWebServer  server(80);
 AsyncWebSocket ws("/ws");
 
-MultiLogger multiLog;
-
 // Pre-declare functions to allow mentioning them before they are defined
 bool setup_wifi_success();
 bool connect_wifi_network(String ssid, String password, String id);
@@ -100,10 +98,10 @@ void setup() {
 
   pinMode(ONBOARD_LED,OUTPUT);
   
-  multiLog.println("");
+  MultiLog.println("");
 
   if (!setup_wifi_success())
-    multiLog.println("Network connection failed, continuing in offline mode (which is the exact same thing as online mode).");
+    MultiLog.println("Network connection failed, continuing in offline mode (which is the exact same thing as online mode).");
 
   sendFullConfigWebSocket();
 }
@@ -123,7 +121,7 @@ void loop() {
   digitalWrite(ONBOARD_LED, LOW);
 
   if (millis() - last_websocket_cleanup > 5*1000) {
-    // multiLog.println("Cleaned up WebSocket clients.");
+    // MultiLog.println("Cleaned up WebSocket clients.");
     ws.cleanupClients();
     last_websocket_cleanup = millis();
   }  
@@ -140,7 +138,7 @@ void loop() {
   }
   
     // if (millis() - last_position_log > 1000) {
-    //   multiLog.println("Position: " + String(rullgardin.get_position()) + ", last position: " + String(position_when_last_checked)); 
+    //   MultiLog.println("Position: " + String(rullgardin.get_position()) + ", last position: " + String(position_when_last_checked)); 
     //   last_position_log = millis();
     // }
 }
@@ -152,7 +150,7 @@ bool setup_wifi_success() {
 
   // Do up to wifi_scan_tries scans
   for (uint8_t s = 0; s < wifi_scan_tries; s++) {
-    multiLog.println("Scanning for available WiFi networks... ");
+    MultiLog.println("Scanning for available WiFi networks... ");
     flash_led(2, 100, 100);
 
     uint8_t networks_found = WiFi.scanNetworks();
@@ -163,12 +161,12 @@ bool setup_wifi_success() {
     delay(100); // Probably not needed
     
     // Print out network names
-    multiLog.print(networks_found + " networks found: ");
+    MultiLog.print(networks_found + " networks found: ");
     for (uint8_t j = 0; j < min((int)networks_found, 10); j++)
-      multiLog.println(": " + WiFi.SSID(j));
+      MultiLog.println(": " + WiFi.SSID(j));
     if (networks_found > 10)
-      multiLog.print("...and " + String(networks_found - 10) + " more");
-    multiLog.print("\n");
+      MultiLog.print("...and " + String(networks_found - 10) + " more");
+    MultiLog.print("\n");
 
     // Check networks found in scan for ones provided in network_credentials.h
     for (uint8_t i = 0; i < sizeof(ssid) / sizeof(ssid[0]); i++) {  // Loop through network_credentials.h entries...
@@ -180,19 +178,19 @@ bool setup_wifi_success() {
     }
     // If no networks were found, or none were connected to
   noNetworksFound: 
-    multiLog.print("No networks found. Scanning again in " + String(wifi_scan_delay_seconds) + " seconds.");
+    MultiLog.print("No networks found. Scanning again in " + String(wifi_scan_delay_seconds) + " seconds.");
     delay(wifi_scan_delay_seconds * 1000);
   }
   wifiConnected:
-  multiLog.println("\n\nWiFi connected!");
-  multiLog.print(": IP address: ");  
-  multiLog.println(WiFi.localIP().toString());
+  MultiLog.println("\n\nWiFi connected!");
+  MultiLog.print(": IP address: ");  
+  MultiLog.println(WiFi.localIP().toString());
   flash_led(3, 100, 100);
   
   if(!MDNS.begin("rullgardin")) 
-    multiLog.println(": Error starting mDNS. ");
+    MultiLog.println(": Error starting mDNS. ");
   else 
-    multiLog.println(": Also available at: rullgardin.local");
+    MultiLog.println(": Also available at: rullgardin.local");
   
   send_ip_to_remote_server();
 
@@ -232,10 +230,10 @@ bool setup_wifi_success() {
   
   WebSerial.begin(&server);
   WebSerial.msgCallback(recvMsg);
-  multiLog.set_web_serial_enabled(true);
+  MultiLog.set_web_serial_enabled(true);
 
   server.begin();
-  multiLog.println(": HTTP server started. ");
+  MultiLog.println(": HTTP server started. ");
 
   return true;
 }
@@ -246,10 +244,10 @@ void sendWebSocket(DynamicJsonDocument config, int32_t client_id) {
   
   if (client_id == -1) {
     ws.textAll(message);
-    multiLog.println("Send WebSocket message: " + message);
+    MultiLog.println("Send WebSocket message: " + message);
   } else {
     ws.text(client_id, message);
-    multiLog.println("Send WebSocket message to client #" + String(client_id) + ": " + message);
+    MultiLog.println("Send WebSocket message to client #" + String(client_id) + ": " + message);
   }
 }
 
@@ -296,27 +294,27 @@ void initWebSocket() {
 }
 
 void recvMsg(uint8_t *data, size_t len){
-  multiLog.println("Received Data...");
+  MultiLog.println("Received Data...");
   String d = "";
   for(int i=0; i < len; i++){
     d += char(data[i]);
   }
-  multiLog.println(d);
+  MultiLog.println(d);
 }
 
 bool connect_wifi_network(String ssid, String password, String id="") {
   if (id != "") { // Skolans nät (som kräver användarnamn (id) + lösen)
-    multiLog.print("Connecting to WPA2 network: "); 
+    MultiLog.print("Connecting to WPA2 network: "); 
     WiFi.begin(ssid.c_str(), WPA2_AUTH_PEAP, "", id.c_str(), password.c_str());
   } else {
     // Connect to provided WiFi network
-    multiLog.print("Connecting to: ");
+    MultiLog.print("Connecting to: ");
     WiFi.begin(ssid.c_str(), password.c_str());
   }
-  multiLog.println(ssid.c_str());
+  MultiLog.println(ssid.c_str());
 
   // Wait until connected
-  multiLog.print("Connecting...");
+  MultiLog.print("Connecting...");
   for (uint8_t m = 1; m <= wifi_connect_seconds_timeout_per_network; m++) { 
     // Blink light (takes 1 second)
     flash_led(1, 500, 500);
@@ -326,13 +324,13 @@ bool connect_wifi_network(String ssid, String password, String id="") {
 
     // Connection timeout
     else if (m == wifi_connect_seconds_timeout_per_network) {
-      multiLog.println("");
-      multiLog.print("WiFi connection timeout. \n");
+      MultiLog.println("");
+      MultiLog.print("WiFi connection timeout. \n");
       WiFi.disconnect();
       delay(1000);
       return false;
     } else  // Keep waiting
-      multiLog.print(".");
+      MultiLog.print(".");
   }
   return false;
 }
@@ -345,17 +343,17 @@ void send_ip_to_remote_server() {
   // Prepare http request
   http.begin(serverPath.c_str());
   
-  multiLog.println(": Sending http GET request: " + serverPath);
+  MultiLog.println(": Sending http GET request: " + serverPath);
   int httpResponseCode = http.GET();
   if (httpResponseCode)
-    multiLog.println(": IP uploaded to remote server.");
+    MultiLog.println(": IP uploaded to remote server.");
   else
-    multiLog.println(": Failed to upload IP to remote server.");
+    MultiLog.println(": Failed to upload IP to remote server.");
 }
 
 void handle_auto() {
   rullgardin.stop();
-  multiLog.println("Stopping.");
+  MultiLog.println("Stopping.");
 }
 
 void handle_up() {
@@ -363,7 +361,7 @@ void handle_up() {
   config["movingTo"] = 0;
   sendWebSocket(config);
   rullgardin.open();
-  multiLog.println("Moving up");
+  MultiLog.println("Moving up");
 }
 
 void handle_down() {
@@ -371,7 +369,7 @@ void handle_down() {
   config["movingTo"] = 100;
   sendWebSocket(config);
   rullgardin.close();
-  multiLog.println("Moving down");
+  MultiLog.println("Moving down");
 }
 
 void handle_speed(String url) {
@@ -403,7 +401,7 @@ String SendHTML(){
 
   // Mount HTML file
   if(!SPIFFS.begin(true)){
-    multiLog.println("An Error has occurred while mounting SPIFFS");
+    MultiLog.println("An Error has occurred while mounting SPIFFS");
     return "";
   }
 
@@ -412,7 +410,7 @@ String SendHTML(){
 
   // Read HTML file to string
   if(!html_file){
-    multiLog.println("Failed to open file for reading");
+    MultiLog.println("Failed to open file for reading");
   } else {
     while(html_file.available()){
       html_string += (char)html_file.read();
@@ -426,7 +424,7 @@ String SendHTML(){
     return html_string;
   
   // Default HTML page, "relic"-ish, useful for when file loading failed
-  multiLog.println("Failed loading HTML file. Returning default page. ");
+  MultiLog.println("Failed loading HTML file. Returning default page. ");
   html_string = "<style>html { font-family: Helvetica; } </style>\n";
   html_string +="<h1>ESP32 Web Server</h3>\n";
   html_string +="<h3>Error: No HTML file was loaded</h3>\n";
