@@ -216,11 +216,13 @@
                 document.getElementById("openSidebarMenu").checked = true;
                 root.style.setProperty('--cover-shadow-sideBar', 'rgba(0,0,0,0.4)');
                 root.style.setProperty('--width-shadow', '100%');
+                document.querySelector('#text-version').style.setProperty('transform', 'translateX(-0px)');
             }
             else if(getCookie("sideBarOut") == "false"){
                 document.getElementById("openSidebarMenu").checked = false;
                 root.style.setProperty('--cover-shadow-sideBar', '');
                 root.style.setProperty('--width-shadow', '');
+                document.querySelector('#text-version').style.setProperty('transform', 'translateX(-250px)');
             }
         }
 
@@ -247,6 +249,7 @@
                 root.style.setProperty('--toggleDM-gradient-color', 'linear-gradient(180deg,#777,#3a3a3a)');
                 root.style.setProperty('--toggleDM-position-left', '206px');
                 root.style.setProperty('--toggleDM-transform', 'translateX(-100%)');
+                root.style.setProperty('--version-text-color','#3f3142')
             }
             else if(getCookie("darkMode") == "false") {
                 root.style.setProperty('--color1', '#9e82ff');
@@ -268,6 +271,7 @@
                 root.style.setProperty('--toggleDM-gradient-color', 'linear-gradient(180deg,#ffcc89,#d8860b)');
                 root.style.setProperty('--toggleDM-position-left', '4px');
                 root.style.setProperty('--toggleDM-transform', '');
+                root.style.setProperty('--version-text-color','#8E75E5')
             }
             await sleep(10);
             root.style.setProperty('--transition-duration', '250ms ease-in-out');
@@ -279,16 +283,16 @@
    
         /* Variables, they do exist */
     :root {
-        --color1: #6DD3CE;
+        --color1: #9e82ff;
         --color2: #C8E9A0;
-        --color3: #F7A278;
+        --color3: #C8E9A0;
         --color4: #A13D63;
         --color5: #351E29;
         --textColor: #242424;
         --outdent-shadow: -5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(255, 255, 255, 0), inset -2px -2px 0px rgba(0, 0, 0, 0);
         --outdent-hover-shadow: -8px -8px 8px rgba(255, 255, 255, 1), 8px 8px 10px rgba(0, 0, 0, 0.3);
         --outdent-active-shadow: -1px -1px 4px rgba(255, 255, 255, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(255, 255, 255, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
-        --indent-shadow: 1px 1px 4px rgba(255, 255, 255, 0), -1px -1px 4px rgba(0, 0, 0, 0), inset -4px -4px 6px rgba(255, 255, 255, 1), inset 4px 4px 6px rgba(0, 0, 0, 0.3);
+        --indent-shadow: 1px 1px 4px rgba(255, 255, 255, 0), -1px -1px 4px rgba(0, 0, 0, 0), inset -4px -4px 6px rgba(255, 255, 255, 0.3), inset 4px 4px 6px rgba(0, 0, 0, 0.3);
         --outdent-shadow2: -5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(255, 255, 255, 0), inset -2px -2px 0px rgba(0, 0, 0, 0);
         --outdent-hover-shadow2: -8px -8px 8px rgba(255, 255, 255, 1), 8px 8px 10px rgba(0, 0, 0, 0.3);
         --outdent-active-shadow2: -1px -1px 4px rgba(255, 255, 255, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(255, 255, 255, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -297,7 +301,7 @@
         --slider-thumb-shadow: inset .4em .4em 5px -8px rgba(255, 255, 255, .5), inset -.4em -.4em 10px -3px rgba(0, 0, 0, 0.3), 0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.3), -1px -1px 2px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(0, 0, 0, 0.3); 
         /* Flat thumb: */
         /*--slider-thumb-shadow: -2px -2px 8px rgba(255, 255, 255, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.4), inset 2px 2px 0px rgba(255, 255, 255, 0), inset -2px -2px 0px rgba(0, 0, 0, 0);*/
-        --background-color: #F0F0F0;
+        --background-color: #f2effe;
         --toggleDM-gradient-color: linear-gradient(180deg,#ffcc89,#d8860b);
         --toggleDM-position-left: 4px;
         --toggleDM-transform: ;
@@ -306,6 +310,7 @@
         --notification-margin: 40px;
         --cover-shadow-sideBar: ;
         --width-shadow: 0%;
+        --version-text-color: #8E75E5;
     }
     body{
         font-family: 'Muli';
@@ -372,12 +377,12 @@
         transition: var(--transition-duration);
         background: var(--color1);
         box-shadow: var(--side-menu-left-shadow);
+        overflow-y: auto;
     }
     .sidebarMenuInner{
         margin:0;
         padding:0;
-        border-top: 1px solid rgba(255, 255, 255, 0.10);
-    }
+        }
     .sidebarMenuInner li{
         list-style: none;
         color: #fff;
@@ -385,7 +390,6 @@
         font-weight: bold;
         padding: 20px;
         cursor: pointer;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.10);
     }
     .sidebarMenuInner li span{
         display: block;
@@ -487,7 +491,25 @@
         }
     
 
-
+        .text {
+            background: var(--color1);
+            margin-left: 0px;
+            width: 250px;
+            height: 50px;
+            color: var(--version-text-color);
+            position: fixed;
+            bottom: 0px;
+            font-family: 'Muli';
+            font-size: 16px;
+            left: -16px;
+        }
+        #text-version {
+            text-align: center;
+            padding-right: 0px;
+            z-index: 12;
+            transition: var(--transition-duration);
+            transform: translateX(-0px);
+        }
         /*Button Classification*/
         .button {
             background: var(--background-color);
@@ -760,10 +782,13 @@
                 </button>
             </li>
             <li>
-                <a href="https://www.linkedin.com/in/plavookac/" target="_blank">L</a>
+                <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank">L</a>
+            </li>
+            <li>
             </li>
         </ul>
     </div>
+    <div class="text" id="text-version">Version: 2.4.8</div>
     <div class="background" id="bckGrnd"></div>
     <div class="background" id="coverShadow" onclick="sideBarToggle()"></div>
     <div class="control-ui">
@@ -783,12 +808,12 @@
             oninput="this.nextElementSibling.value = this.value" 
             onmouseup="$.post(serverIP + '/position/' + this.value)" 
             ontouchend="$.post(serverIP + '/position/' + this.value)" > <!-- onmouseup for desktop, ontouchend for mobile -->
-        <output class="value-box" id="valuePlace">50</output>
+        <output class="value-box" id="valuePlace"></output>
         <input type="range" id="sliderSpeed" value="800" min="0" max="2000" step="50" display="false"
             oninput="this.nextElementSibling.value = this.value" 
             onmouseup="$.post(serverIP + '/speed/' + this.value)" 
             ontouchend="$.post(serverIP + '/speed/' + this.value)" > <!-- onmouseup for desktop, ontouchend for mobile -->
-        <output class="value-box" id="valueSpeed">1000</output>
+        <output class="value-box" id="valueSpeed"></output>
     </div>
     <output class="notification" id="disconnectedMessage">Disconnected From Server</output>
 </body>
