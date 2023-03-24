@@ -42,7 +42,7 @@
             await sleep(1000);
             // document.querySelector('#disconnectedMessage').style.setProperty('transform', 'translateX(-50%)translateY(-50%)');
             while(websocketConnected == false) {
-                document.querySelector('#disconnectedMessage').style.setProperty('transform', 'translateX(-50%)translateY(-50%)');
+                document.querySelector('#disconnectedMessage').style.setProperty('transform', 'translateX(0%)translateY(0%)');
                 if(i<20){
                     websocket = new WebSocket(gateway);
                     await sleep(1000)
@@ -55,7 +55,7 @@
                 }
             }
             await sleep(3000);
-            document.querySelector('#disconnectedMessage').style.setProperty('transform', 'translateX(-50%)translateY(+180px)');
+            document.querySelector('#disconnectedMessage').style.setProperty('transform', 'translateX(0%)translateY(+180px)');
 
         }
         function onMessage(event) {
@@ -105,6 +105,7 @@
                 devMode = true;
             }
         }
+        
         async function demoModeToggle() {
             if(demoMode == true) {
                 root.style.setProperty('--transition-duration', '0ms ease-in-out');
@@ -114,6 +115,7 @@
                 document.querySelector('#set-curr-pos-top-btn').style.setProperty('position', 'absolute');
                 document.querySelector('#set-curr-pos-max-btn').style.setProperty('position', 'absolute');
                 document.querySelector('#rmv-max-pos-lim-btn').style.setProperty('position', 'absolute');
+                document.getElementById('rickRoll').textContent = "L";
                 await sleep(10);
                 root.style.setProperty('--transition-duration', '250ms ease-in-out');
                 demoMode = false;
@@ -126,6 +128,7 @@
                 document.querySelector('#set-curr-pos-top-btn').style.setProperty('position', '');
                 document.querySelector('#set-curr-pos-max-btn').style.setProperty('position', '');
                 document.querySelector('#rmv-max-pos-lim-btn').style.setProperty('position', '');
+                document.getElementById('rickRoll').textContent = "";
                 await sleep(10);
                 root.style.setProperty('--transition-duration', '250ms ease-in-out');
                 demoMode = true;
@@ -247,7 +250,7 @@
                 root.style.setProperty('--oliver-active-shadow', '-5px -5px 8px rgba(51, 51, 61, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(51, 51, 61, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3)');
                 root.style.setProperty('--slider-thumb-shadow', 'inset .4em .4em 5px -8px rgba(51, 51, 61, 1), inset -.4em -.4em 10px -3px rgba(0, 0, 0, 0.3), 0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.3), -1px -1px 2px rgba(51, 51, 61, 1), 1px 1px 2px rgba(0, 0, 0, 0.3)');
                 root.style.setProperty('--toggleDM-gradient-color', 'linear-gradient(180deg,#777,#3a3a3a)');
-                root.style.setProperty('--toggleDM-position-left', '206px');
+                root.style.setProperty('--toggleDM-position-left', '106px');
                 root.style.setProperty('--toggleDM-transform', 'translateX(-100%)');
                 root.style.setProperty('--version-text-color','#3f3142')
             }
@@ -379,23 +382,23 @@
         box-shadow: var(--side-menu-left-shadow);
         overflow-y: auto;
     }
-    .sidebarMenuInner{
+    #sidebarMenuInner{
         margin:0;
         padding:0;
         }
-    .sidebarMenuInner li{
+    #sidebarMenuInner li{
         list-style: none;
         color: #fff;
         text-transform: uppercase;
         font-weight: bold;
-        padding: 20px;
+        padding-left: 20px;
         cursor: pointer;
     }
-    .sidebarMenuInner li span{
+    #sidebarMenuInner li span{
         display: block;
         font-size: 18px;
     }
-    .sidebarMenuInner li a{
+    #sidebarMenuInner li a{
         color: #fff;
         text-transform: uppercase;
         font-weight: bold;
@@ -535,6 +538,7 @@
         }
         
         .button2 {
+            margin-bottom: 40px;
             background: var(--background-color);
             color: var(--textColor);
             border-radius: 9999px;
@@ -607,6 +611,10 @@
             box-shadow: var(--indent-shadow);
             grid-area: slider;
         }
+        
+        #rickRoll {
+
+        }
 
         /* input[type="range"]:focus { */
             /* To remove default (mostly blue) outline appplied by browsers on :focus */
@@ -662,18 +670,21 @@
         .value-box {
             display: grid;
             align-items: center;
-            justify-content: center;
+            justify-items: center;
             background: var(--background-color);
             color: var(--textColor);
             border-radius: 9999px;
-            box-shadow: var(--outdent-shadow);
-            transition: all var(--transition-duration);
-            width: calc(50% - var(--margin)/2);
-            height: 50px;
-            /* Center the stupid thing: */
-            margin-left: 200px;
-            z-index: 2;
+            width: min(60%, 192.5px);
+            box-shadow: var(--outdent-shadow); 
+            border: 0px solid var(--background-color);
+            cursor: pointer;
+            margin-left: 50%;
             transform: translateX(-50%);
+            transition: all var(--transition-duration);
+            font-size: 22px;
+            height: 50px;
+            padding: 0;
+            z-index: 2;
         }
         .notification {
             align-items: center;
@@ -688,12 +699,12 @@
             z-index: 5;
         }
         #disconnectedMessage {
-            width: 350px;
+            width: min(350px, calc(100% - calc(2*var(--notification-margin))));
             height: 75px;
             border-radius: 100px;
-            left: calc(calc(100% - 175px) - var(--notification-margin));
-            top: calc(calc(100% - calc(75px/2)) - var(--notification-margin));
-            transform: translateX(-50%)translateY(+180px);
+            right: var(--notification-margin);
+            bottom: var(--notification-margin);
+            transform: translateX(0%)translateY(+180px);
         }
         #valuePlace {
             grid-area: valuePlace;
@@ -715,10 +726,12 @@
             cursor: pointer;
             display: block;
             position: relative;
+            margin-top: 40px;
+            margin-bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             transition: var(--transition-duration);
-            width: 210px;
+            width: 110px;
             height: 50px;
             box-shadow: var(--indent-shadow);
         }
@@ -746,7 +759,7 @@
         background: var(--toggleDM-gradient-color);
         }
         .labelToggle:active:after{
-            width: 120px;
+            width: 60px;
         }
         
 
@@ -761,13 +774,13 @@
     <div class="spinner diagonal part-2"></div>
     </label>
     <div id="sidebarMenu">
-        <ul class="sidebarMenuInner">
+        <ul id="sidebarMenuInner">
             <li> 
                 <input class="inputToggle" type="checkbox" id="darkmode-toggle" onclick="toggleDarkMode()"/>
 	            <label class="labelToggle" for="darkmode-toggle"></label>
             </li>
             <li>
-                <button class="button2" id="set-curr-pos-top-btn" onclick="$.post(serverIP + '/set_current_position_as_top')">
+                <button  class="button2" id="set-curr-pos-top-btn" onclick="$.post(serverIP + '/set_current_position_as_top')">
                     <span>Set Position as Top</span>
                 </button>
             </li>
@@ -782,13 +795,13 @@
                 </button>
             </li>
             <li>
-                <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank">L</a>
+                <a id="rickRoll" href="https://youtu.be/dQw4w9WgXcQ" target="_blank"></a>
             </li>
             <li>
             </li>
         </ul>
     </div>
-    <div class="text" id="text-version">Version: 2.4.8</div>
+    <div class="text" id="text-version">Version: 2.4.9</div>
     <div class="background" id="bckGrnd"></div>
     <div class="background" id="coverShadow" onclick="sideBarToggle()"></div>
     <div class="control-ui">
