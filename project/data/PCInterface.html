@@ -274,7 +274,7 @@
                 root.style.setProperty('--toggleDM-gradient-color', 'linear-gradient(180deg,#ffcc89,#d8860b)');
                 root.style.setProperty('--toggleDM-position-left', '4px');
                 root.style.setProperty('--toggleDM-transform', '');
-                root.style.setProperty('--version-text-color','#8E75E5')
+                root.style.setProperty('--version-text-color','#715DB7')
             }
             await sleep(10);
             root.style.setProperty('--transition-duration', '250ms ease-in-out');
@@ -313,7 +313,7 @@
         --notification-margin: 40px;
         --cover-shadow-sideBar: ;
         --width-shadow: 0%;
-        --version-text-color: #8E75E5;
+        --version-text-color: #715DB7;
     }
     body{
         font-family: 'Muli';
@@ -511,7 +511,7 @@
             padding-right: 0px;
             z-index: 12;
             transition: var(--transition-duration);
-            transform: translateX(-0px);
+            transform: translateX(-250px);
         }
         /*Button Classification*/
         .button {
@@ -728,7 +728,7 @@
             position: relative;
             margin-top: 40px;
             margin-bottom: 40px;
-            left: 50%;
+            left: calc(50% - 10px);
             transform: translateX(-50%);
             transition: var(--transition-duration);
             width: 110px;
@@ -801,7 +801,7 @@
             </li>
         </ul>
     </div>
-    <div class="text" id="text-version">Version: 2.4.9</div>
+    <div class="text" id="text-version">Version: 2.4.10</div>
     <div class="background" id="bckGrnd"></div>
     <div class="background" id="coverShadow" onclick="sideBarToggle()"></div>
     <div class="control-ui">
