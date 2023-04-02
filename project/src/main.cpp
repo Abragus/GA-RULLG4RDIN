@@ -87,7 +87,9 @@ void handle_NotFound();
 void handle_position(String url);
 void recvMsg(uint8_t *data, size_t len);
 
-String SendHTML();
+String getHTML();String readFile(String file_name);
+String readFile(String file_name);
+bool writeFile(String file_name, String file_content);
 
 Rullgardin rullgardin = Rullgardin();
 
@@ -201,7 +203,7 @@ bool setup_wifi_success() {
     request->redirect("/home");
   });
   server.on("/home", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", SendHTML());
+    request->send(200, "text/html", getHTML());
   });
   server.on("/auto", [](AsyncWebServerRequest *request){
     handle_auto();
@@ -397,39 +399,22 @@ void handle_position(String url) {
 }
 
 // Prepares HTML code to send to client, from PCInterface.html
-String SendHTML(){
+String getHTML(){
 
-  // Mount HTML file
-  if(!SPIFFS.begin(true)){
-    MultiLog.println("An Error has occurred while mounting SPIFFS");
-    return "";
-  }
-
-  File html_file = SPIFFS.open("/PCInterface.html");
-  String html_string; // String for HTML file to return to client
-
-  // Read HTML file to string
-  if(!html_file){
-    MultiLog.println("Failed to open file for reading");
-  } else {
-    while(html_file.available()){
-      html_string += (char)html_file.read();
-    }
-  }
-  html_file.close();
+  String html_content = readFile("PCInterface.html");
 
   // If HTML file successfully loaded, return it 
-  if (html_string != "")
-    html_string.replace("___serverip___", WiFi.localIP().toString());
-    return html_string;
-  
-  // Default HTML page, "relic"-ish, useful for when file loading failed
-  MultiLog.println("Failed loading HTML file. Returning default page. ");
-  html_string = "<style>html { font-family: Helvetica; } </style>\n";
-  html_string +="<h1>ESP32 Web Server</h3>\n";
-  html_string +="<h3>Error: No HTML file was loaded</h3>\n";
+  if (html_content != "") {
+    html_content.replace("___serverip___", WiFi.localIP().toString());
+  } else {  
+    // Default HTML page, "relic"-ish, useful for when file loading failed
+    MultiLog.println("Failed loading HTML file. Returning default page. ");
+    html_content = "<style>html { font-family: Helvetica; } </style>\n";
+    html_content +="<h1>ESP32 Web Server</h3>\n";
+    html_content +="<h3>Error: No HTML file was loaded</h3>\n";
+  }
 
-  return html_string;
+  return html_content;
 }
 
 void flash_led(uint8_t flashes, uint16_t on_time, uint16_t off_time) {
@@ -439,6 +424,39 @@ void flash_led(uint8_t flashes, uint16_t on_time, uint16_t off_time) {
       digitalWrite(ONBOARD_LED, LOW);
       delay(off_time);
   }
+}
+
+String readFile(String file_name) {
+  // Mount file
+  if(!SPIFFS.begin(true)){
+    MultiLog.println("An Error has occurred while mounting SPIFFS");
+    return "";
+  }
+
+  File file = SPIFFS.open(file_name);
+  String file_content;
+
+  // Read entire file to string
+  if(!file){
+    MultiLog.println("Failed to open file for reading");
+  } else {
+    while(file.available()){
+      file_content += (char)file.read();
+    }
+  }
+  file.close();
+
+  return file_content;
+}
+
+bool writeFile(String file_name, String file_content) {
+  // Mount file
+  if(!SPIFFS.begin(true)){
+    MultiLog.println("An Error has occurred while mounting SPIFFS");
+    return "";
+  }
+
+  File file = SPIFFS.open(file_name);
 }
 
 #endif
