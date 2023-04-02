@@ -162,22 +162,27 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        function onLoad() {
+        async function onLoad() {
             initWebSocket();
-            onCloseRestoreConnection()
+            onCloseRestoreConnection();
             if(getCookie("darkMode") == null) {
                 setCookie("darkMode", "true");
             }
             if(getCookie("sideBarOut") == null) {
                 setCookie("sideBarOut", "false");
             }
+            root.style.setProperty('--transition-duration', '0ms');
+            await sleep(10);
             updatePageDarkMode();
+            root.style.setProperty('--transition-duration', '0ms');
+            await sleep(10);
             sideBarPopOut();
             if(getCookie("sideBarOut") == "true") {
                 document.getElementById("openSidebarMenu").checked = true;
             }
             document.getElementById("valuePlace").value = document.getElementById("sliderPlace").value;
             document.getElementById("valueSpeed").value = document.getElementById("sliderSpeed").value;
+            root.style.setProperty('--transition-duration', '250ms ease-in-out');
         }
 
         function setCookie(key, value) {
@@ -225,10 +230,10 @@
                 root.style.setProperty('--width-shadow', '');
                 document.querySelector('#text-version').style.setProperty('transform', 'translateX(-250px)');
             }
+            root.style.setProperty('--transition-duration', '250ms ease-in-out');
         }
 
         async function updatePageDarkMode() {
-
             if(getCookie("darkMode") == "true") {
                 root.style.setProperty('--color1', '#231b25');
                 root.style.setProperty('--color2', '#123059');
@@ -294,9 +299,9 @@
         --outdent-hover-shadow: -8px -8px 8px rgba(255, 255, 255, 1), 8px 8px 10px rgba(0, 0, 0, 0.3);
         --outdent-active-shadow: -1px -1px 4px rgba(255, 255, 255, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(255, 255, 255, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
         --indent-shadow: 1px 1px 4px rgba(255, 255, 255, 0), -1px -1px 4px rgba(0, 0, 0, 0), inset -4px -4px 6px rgba(255, 255, 255, 0.3), inset 4px 4px 6px rgba(0, 0, 0, 0.3);
-        --outdent-shadow2: -5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(255, 255, 255, 0), inset -2px -2px 0px rgba(0, 0, 0, 0);
-        --outdent-hover-shadow2: -8px -8px 8px rgba(255, 255, 255, 1), 8px 8px 10px rgba(0, 0, 0, 0.3);
-        --outdent-active-shadow2: -1px -1px 4px rgba(255, 255, 255, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(255, 255, 255, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+        --outdent-shadow2: -5px -5px 8px rgba(255, 255, 255, 0.3), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(255, 255, 255, 0), inset -2px -2px 0px rgba(0, 0, 0, 0);
+        --outdent-hover-shadow2: -8px -8px 8px rgba(255, 255, 255, 0.3), 8px 8px 10px rgba(0, 0, 0, 0.3);
+        --outdent-active-shadow2: -1px -1px 4px rgba(255, 255, 255, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(255, 255, 255, 0.3), inset 2px 2px 4px rgba(0, 0, 0, 0.3);
         /*--oliver-active-shadow: -5px -5px 8px rgba(255, 255, 255, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset -2px -2px 3px rgba(255, 255, 255, 1), inset 2px 2px 3px rgba(0, 0, 0, 0.3);*/
         /* Round thumb: */
         --slider-thumb-shadow: inset .4em .4em 5px -8px rgba(255, 255, 255, .5), inset -.4em -.4em 10px -3px rgba(0, 0, 0, 0.3), 0.7em 0.5em 7px -0.5em rgba(0, 0, 0, 0.3), -1px -1px 2px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(0, 0, 0, 0.3); 
@@ -306,7 +311,7 @@
         --toggleDM-gradient-color: linear-gradient(180deg,#ffcc89,#d8860b);
         --toggleDM-position-left: 4px;
         --toggleDM-transform: ;
-        --transition-duration: 0ms;
+        --transition-duration: 250ms ease-in-out;
         --margin: 15px;
         --notification-margin: 40px;
         --cover-shadow-sideBar: ;
