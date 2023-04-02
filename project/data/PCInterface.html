@@ -146,9 +146,7 @@
             
             while(document.getElementById("sliderPlace").value != moveToPosition) {
                 if(moveToPosition > document.getElementById("sliderPlace").value){
-                    console.log(document.getElementById("sliderPlace").value);
                     document.getElementById("sliderPlace").value -= -1;
-                    console.log(document.getElementById("sliderPlace").value);
                     await sleep(waitTimeSlider);
                 }
                 else if(moveToPosition < document.getElementById("sliderPlace").value){
