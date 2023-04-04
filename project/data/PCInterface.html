@@ -163,7 +163,6 @@
         }
 
         async function onLoad() {
-            initWebSocket();
             onCloseRestoreConnection();
             if(getCookie("darkMode") == null) {
                 setCookie("darkMode", "true");
@@ -171,18 +170,18 @@
             if(getCookie("sideBarOut") == null) {
                 setCookie("sideBarOut", "false");
             }
-            root.style.setProperty('--transition-duration', '0ms');
-            await sleep(10);
             updatePageDarkMode();
-            root.style.setProperty('--transition-duration', '0ms');
-            await sleep(10);
             sideBarPopOut();
             if(getCookie("sideBarOut") == "true") {
                 document.getElementById("openSidebarMenu").checked = true;
             }
             document.getElementById("valuePlace").value = document.getElementById("sliderPlace").value;
             document.getElementById("valueSpeed").value = document.getElementById("sliderSpeed").value;
+            
+            await sleep(10);
             root.style.setProperty('--transition-duration', '250ms ease-in-out');
+
+            initWebSocket();
         }
 
         function setCookie(key, value) {
@@ -230,7 +229,6 @@
                 root.style.setProperty('--width-shadow', '');
                 document.querySelector('#text-version').style.setProperty('transform', 'translateX(-250px)');
             }
-            root.style.setProperty('--transition-duration', '250ms ease-in-out');
         }
 
         async function updatePageDarkMode() {
@@ -242,7 +240,6 @@
                 root.style.setProperty('--color5', '#242424');
                 root.style.setProperty('--textColor', '#F0F0F0');
                 root.style.setProperty('--background-color', '#261f27');
-                root.style.setProperty('--outdent-shadow', '-5px -5px 8px rgba(51, 51, 61, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(51, 51, 61, 0), inset -2px -2px 0px rgba(0, 0, 0, 0)');
                 root.style.setProperty('--outdent-shadow', '-5px -5px 8px rgba(51, 51, 61, 1), 5px 5px 8px rgba(0, 0, 0, 0.3), inset 2px 2px 0px rgba(51, 51, 61, 0), inset -2px -2px 0px rgba(0, 0, 0, 0)');
                 root.style.setProperty('--outdent-hover-shadow', '-8px -8px 8px rgba(51, 51, 61, 1), 8px 8px 10px rgba(0, 0, 0, 0.3)');
                 root.style.setProperty('--outdent-active-shadow', '-1px -1px 4px rgba(51, 51, 61, 0), 1px 1px 4px rgba(0, 0, 0, 0), inset -2px -2px 5px rgba(51, 51, 61, 1), inset 2px 2px 4px rgba(0, 0, 0, 0.3)');
@@ -279,8 +276,6 @@
                 root.style.setProperty('--toggleDM-transform', '');
                 root.style.setProperty('--version-text-color','#715DB7')
             }
-            await sleep(10);
-            root.style.setProperty('--transition-duration', '250ms ease-in-out');
         }
         
         
@@ -311,7 +306,7 @@
         --toggleDM-gradient-color: linear-gradient(180deg,#ffcc89,#d8860b);
         --toggleDM-position-left: 4px;
         --toggleDM-transform: ;
-        --transition-duration: 250ms ease-in-out;
+        --transition-duration: 0ms;
         --margin: 15px;
         --notification-margin: 40px;
         --cover-shadow-sideBar: ;
@@ -804,7 +799,7 @@
             </li>
         </ul>
     </div>
-    <div class="text" id="text-version">Version: 2.4.10</div>
+    <div class="text" id="text-version">Version: 2.4.11</div>
     <div class="background" id="bckGrnd"></div>
     <div class="background" id="coverShadow" onclick="sideBarToggle()"></div>
     <div class="control-ui">
