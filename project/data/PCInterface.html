@@ -110,11 +110,11 @@
             if(demoMode == true) {
                 root.style.setProperty('--transition-duration', '0ms ease-in-out');
                 document.querySelector('#set-curr-pos-top-btn').style.setProperty('visibility', 'hidden');
-                document.querySelector('#set-curr-pos-max-btn').style.setProperty('visibility', 'hidden');
-                document.querySelector('#rmv-max-pos-lim-btn').style.setProperty('visibility', 'hidden');
+                document.querySelector('#set-curr-pos-bottom-btn').style.setProperty('visibility', 'hidden');
+                document.querySelector('#rmv-bottom-lim-btn').style.setProperty('visibility', 'hidden');
                 document.querySelector('#set-curr-pos-top-btn').style.setProperty('position', 'absolute');
-                document.querySelector('#set-curr-pos-max-btn').style.setProperty('position', 'absolute');
-                document.querySelector('#rmv-max-pos-lim-btn').style.setProperty('position', 'absolute');
+                document.querySelector('#set-curr-pos-bottom-btn').style.setProperty('position', 'absolute');
+                document.querySelector('#rmv-bottom-lim-btn').style.setProperty('position', 'absolute');
                 document.getElementById('rickRoll').textContent = "L";
                 await sleep(10);
                 root.style.setProperty('--transition-duration', '250ms ease-in-out');
@@ -123,11 +123,11 @@
             else {
                 root.style.setProperty('--transition-duration', '0ms ease-in-out');
                 document.querySelector('#set-curr-pos-top-btn').style.setProperty('visibility', '');
-                document.querySelector('#set-curr-pos-max-btn').style.setProperty('visibility', '');
-                document.querySelector('#rmv-max-pos-lim-btn').style.setProperty('visibility', '');
+                document.querySelector('#set-curr-pos-bottom-btn').style.setProperty('visibility', '');
+                document.querySelector('#rmv-bottom-lim-btn').style.setProperty('visibility', '');
                 document.querySelector('#set-curr-pos-top-btn').style.setProperty('position', '');
-                document.querySelector('#set-curr-pos-max-btn').style.setProperty('position', '');
-                document.querySelector('#rmv-max-pos-lim-btn').style.setProperty('position', '');
+                document.querySelector('#set-curr-pos-bottom-btn').style.setProperty('position', '');
+                document.querySelector('#rmv-bottom-lim-btn').style.setProperty('position', '');
                 document.getElementById('rickRoll').textContent = "";
                 await sleep(10);
                 root.style.setProperty('--transition-duration', '250ms ease-in-out');
@@ -583,14 +583,14 @@
             background: var(--color1);
         }
 
-        #set-curr-pos-max-btn {
+        #set-curr-pos-bottom-btn {
             font-size: 16px;
             height: 50px;
             width: 210px;
             background: var(--color1);
         }
 
-        #rmv-max-pos-lim-btn {
+        #rmv-bottom-lim-btn {
             font-size: 22px;
             height: 50px;
             width: 210px;
@@ -783,12 +783,12 @@
                 </button>
             </li>
             <li>
-                <button class="button2" id="set-curr-pos-max-btn" onclick="$.post(serverIP + '/set_current_position_as_max')">
+                <button class="button2" id="set-curr-pos-bottom-btn" onclick="$.post(serverIP + '/set_current_position_as_bottom')">
                     <span>Set Position as Bottom</span>
                 </button>
             </li>
             <li>
-                <button class="button2" id="rmv-max-pos-lim-btn" onclick="$.post(serverIP + '/remove_max_position_limit')">
+                <button class="button2" id="rmv-bottom-lim-btn" onclick="$.post(serverIP + '/remove_bottom_position_limit')">
                     <span>Remove Bottom Limit</span>
                 </button>
             </li>
