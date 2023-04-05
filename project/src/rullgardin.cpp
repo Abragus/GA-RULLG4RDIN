@@ -97,7 +97,7 @@ void Rullgardin::close() {
 }
 
 int Rullgardin::get_position() {
-    return motor.currentPosition() * 100 / max_steps;
+    return 100 - motor.currentPosition() * 100 / max_steps;
 }
 
 void Rullgardin::move_to_position(uint8_t in_position) {
@@ -116,11 +116,11 @@ void Rullgardin::set_current_position_as_top() {
     motor.setCurrentPosition(0);
 }
 
-void Rullgardin::set_current_position_as_max() {
+void Rullgardin::set_current_position_as_bottom() {
     max_steps = (motor.currentPosition() < theoretical_max_steps ? motor.currentPosition() : theoretical_max_steps); // Minimum
 }
 
-void Rullgardin::remove_max_position_limit() {
+void Rullgardin::remove_bottom_position_limit() {
     max_steps = theoretical_max_steps;
 }
 

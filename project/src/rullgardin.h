@@ -50,9 +50,9 @@ public:
 
     void set_current_position_as_top();
 
-    void set_current_position_as_max();
+    void set_current_position_as_bottom();
 
-    void remove_max_position_limit();
+    void remove_bottom_position_limit();
 
     uint16_t get_speed();
 
