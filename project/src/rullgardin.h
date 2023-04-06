@@ -72,7 +72,7 @@ private:
     int8_t current_direction = CW;
 
     uint32_t max_steps = 200*4*10;
-    uint32_t theoretical_max_steps = 200*4*100;
+    const uint32_t theoretical_max_steps = 200*4*100;
 };
 
 #endif

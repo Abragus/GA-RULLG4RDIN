@@ -1,9 +1,6 @@
 #ifndef RULLGARDIN_cpp
 #define RULLGARDIN_cpp
 
-// #define CW 1
-// #define CCW -1
-
 #include "rullgardin.h"
 
 extern MultiLogger MultiLog;
@@ -101,7 +98,9 @@ int Rullgardin::get_position() {
 }
 
 void Rullgardin::move_to_position(uint8_t in_position) {
-    int target_position_raw = in_position * max_steps / 100;
+    in_position = (in_position > 100 ? 100 : in_position < 0 ? 0 : in_position); // Make sure value in range
+
+    int target_position_raw = (100-in_position) * max_steps / 100;
     MultiLog.println("Running from position: " + String(motor.currentPosition()) + ", to position: " + String(target_position_raw));
     // motor.enableOutputs();
     motor.moveTo(target_position_raw);
