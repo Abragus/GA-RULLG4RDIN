@@ -11,7 +11,7 @@
 
 **********/
 
-// #include "interface.h"
+#define FIRMWARE_VERSION "1.3.1"
 
 #include <stdlib.h>
 #include <Arduino.h>
@@ -91,6 +91,11 @@ String getHTML();String readFile(String file_name);
 String readFile(String file_name);
 bool writeFile(String file_name, String file_content);
 
+
+DynamicJsonDocument readConfig();
+void writeConfig(DynamicJsonDocument config);
+void merge(JsonVariant dst, JsonVariantConst src);
+
 Rullgardin rullgardin = Rullgardin();
 
 void flash_led(uint8_t flashes, uint16_t on_time, uint16_t off_time);
@@ -104,6 +109,8 @@ void setup() {
 
   if (!setup_wifi_success())
     MultiLog.println("Network connection failed, continuing in offline mode (which is the exact same thing as online mode).");
+
+  rullgardin.set_up_direction(CCW);
 
   sendFullConfigWebSocket();
 }
@@ -225,6 +232,18 @@ bool setup_wifi_success() {
     handle_position(request->url().c_str());
     request->send(200);
   });
+  server.on("/set_current_position_as_top", [](AsyncWebServerRequest *request){
+    rullgardin.set_current_position_as_top();
+    request->send(200);
+  });
+  server.on("/set_current_position_as_bottom", [](AsyncWebServerRequest *request){
+    rullgardin.set_current_position_as_bottom();
+    request->send(200);
+  });
+  server.on("/remove_bottom_position_limit", [](AsyncWebServerRequest *request){
+    rullgardin.remove_bottom_position_limit();
+    request->send(200);
+  });
 
   initWebSocket();
 
@@ -258,6 +277,7 @@ void sendFullConfigWebSocket(int32_t client_id) {
   config["speed"] = rullgardin.get_speed();
   config["position"] = rullgardin.get_position();
   config["maxSteps"] = rullgardin.get_max_steps();
+  config["firmware_version"] = FIRMWARE_VERSION;
   sendWebSocket(config, client_id);
 }
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
@@ -360,7 +380,7 @@ void handle_auto() {
 
 void handle_up() {
   StaticJsonDocument<128> config;
-  config["movingTo"] = 0;
+  config["movingTo"] = 100;
   sendWebSocket(config);
   rullgardin.open();
   MultiLog.println("Moving up");
@@ -368,7 +388,7 @@ void handle_up() {
 
 void handle_down() {
   StaticJsonDocument<128> config;
-  config["movingTo"] = 100;
+  config["movingTo"] = 0;
   sendWebSocket(config);
   rullgardin.close();
   MultiLog.println("Moving down");
@@ -401,7 +421,7 @@ void handle_position(String url) {
 // Prepares HTML code to send to client, from PCInterface.html
 String getHTML(){
 
-  String html_content = readFile("PCInterface.html");
+  String html_content = readFile("/PCInterface.html");
 
   // If HTML file successfully loaded, return it 
   if (html_content != "") {
@@ -428,7 +448,7 @@ void flash_led(uint8_t flashes, uint16_t on_time, uint16_t off_time) {
 
 String readFile(String file_name) {
   // Mount file
-  if(!SPIFFS.begin(true)){
+  if (!SPIFFS.begin(true)) {
     MultiLog.println("An Error has occurred while mounting SPIFFS");
     return "";
   }
@@ -437,7 +457,7 @@ String readFile(String file_name) {
   String file_content;
 
   // Read entire file to string
-  if(!file){
+  if (!file) {
     MultiLog.println("Failed to open file for reading");
   } else {
     while(file.available()){
@@ -451,12 +471,14 @@ String readFile(String file_name) {
 
 bool writeFile(String file_name, String file_content) {
   // Mount file
-  if(!SPIFFS.begin(true)){
+  if (!SPIFFS.begin(true)) {
     MultiLog.println("An Error has occurred while mounting SPIFFS");
-    return "";
+    return false;
   }
-
-  File file = SPIFFS.open(file_name);
+  File file = SPIFFS.open(file_name, FILE_WRITE);
+  bool successful = file.print(file_content);
+  file.close();
+  return successful;  
 }
 
 #endif
