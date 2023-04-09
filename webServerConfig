@@ -13,44 +13,114 @@ server {
 
 server {
     listen 80;
-    listen [::]:80;
 
     server_name rullgardin.duckdns.org www.rullgardin.duckdns.org;
+    access_log  /var/log/openresty/access.log;
+    error_log  /var/log/openresty/error.log;
     
-    root /var/www/rullgardin.duckdns.org/html;
-    index index.html;
-
-    return 301 https://rullgardin.duckdns.org$request_uri;
+    location /update-ip {
+        access_by_lua_block {
+            -- ngx.log(ngx.STDERR, "In access_by_lua_block. ")
+            local file, err = io.open("/usr/local/openresty/nginx/redirect_url.txt", "w")
+            if file == nil then
+                ngx.log(ngx.STDERR, "Couldn\'t open file: " .. err)
+            else
+                file:write(ngx.var.arg_newip)
+                file:close()
+                ngx.log(ngx.STDERR, "Writing new ip to file: " .. ngx.var.arg_newip)
+            end
+        }
+        # return 200;
+    }
+    
+    location / {
+        return 301 https://rullgardin.duckdns.org$request_uri;
+    }
 }
 
 server {
     listen 443 ssl;
-    listen [::]:443;
+    #listen 80;
+    #listen [::]:443;
 
     ssl_certificate /etc/letsencrypt/live/wywmctvjiph9s4.duckdns.org/fullchain.pem; 
     ssl_certificate_key /etc/letsencrypt/live/wywmctvjiph9s4.duckdns.org/privkey.pem; 
+    
+    access_log  /var/log/openresty/access.log;
+    error_log  /var/log/openresty/error.log;
 
     server_name rullgardin.duckdns.org www.rullgardin.duckdns.org;
 
     root /var/www/rullgardin.duckdns.org/html;
     index home;
 
+    # location / {
+    #     set_by_lua_block $ip {
+    #         local file, err = io.open("/usr/local/openresty/nginx/redirect_url.txt", "r")
+    #         local url = "https://google.com"
+    #         if file == nil then
+    #             ngx.log(ngx.STDERR, "Couldn\'t open file: " .. err)
+    #         else
+    #             io.input(file)
+    #             url = io.read()
+    #             file:close()
+    #             return url
+    #         end
+    #     }
+    # 
+    #     return 301 $ip;
+    # }
 
+    location /update {
+        set_by_lua_block $ip {
+            local file, err = io.open("/usr/local/openresty/nginx/redirect_url.txt", "r")
+            local url = "https://google.com"
+            if file == nil then
+                ngx.log(ngx.STDERR, "Couldn\'t open file: " .. err)
+            else
+                io.input(file)
+                url = io.read()
+                file:close()
+                return url
+            end
+        }
+
+        return 301 "http://${ip}/update";
+    }
+
+    location /webserial {
+        set_by_lua_block $ip {
+            local file, err = io.open("/usr/local/openresty/nginx/redirect_url.txt", "r")
+            local url = "https://google.com"
+            if file == nil then
+                ngx.log(ngx.STDERR, "Couldn\'t open file: " .. err)
+            else
+                io.input(file)
+                url = io.read()
+                file:close()
+                return url
+            end
+        }
+
+        return 301 "http://${ip}/webserial";
+    }
+    
     location /update-ip {
-            content_by_lua '
-                    local file, err = io.open("/usr/local/openresty/nginx/redirect_url.txt", "w+")
-                    if file == nil then
-                        ngx.log(ngx.STDERR, "Couldn\'t open file: " .. err)
-                    else
-                        file:write(ngx.var.arg_newip)
-                        file:close()
-                    end
-            ';
-            return 200;
+        access_by_lua_block {
+            -- ngx.log(ngx.STDERR, "In access_by_lua_block. ")
+            local file, err = io.open("/usr/local/openresty/nginx/redirect_url.txt", "w")
+            if file == nil then
+                ngx.log(ngx.STDERR, "Couldn\'t open file: " .. err)
+            else
+                file:write(ngx.var.arg_newip)
+                file:close()
+                ngx.log(ngx.STDERR, "Writing new ip to file: " .. ngx.var.arg_newip)
+            end
+        }
     }
     
     location / {
-        return 301 /home;
+        rewrite /home redirect;
     }
 
     location /home {
@@ -66,8 +136,11 @@ server {
                 return url
             end
         }
-        sub_filter_once off;
-        sub_filter "___serverip___" $ip;
-        default_type "text/html";
+
+        return 301 "http://${ip}/home";
+
+        # sub_filter_once off;
+        # sub_filter "___serverip___" $ip;
+        # default_type "text/html";
     }
 }
