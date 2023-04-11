@@ -144,7 +144,7 @@ server {
             end
         }
 
-        # rewrite ^/(.*)$ http://${ip}/$1 redirect;
+        rewrite ^/(.*)$ http://${ip}/$1 redirect;
 
         # sub_filter_once off;
         # sub_filter "___serverip___" $ip;
