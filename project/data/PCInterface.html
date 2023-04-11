@@ -12,6 +12,9 @@
         var serverIP = "http://" + "___serverip___"; // ___serverip___ gets replaced with ESP IP, by computer serving the webpage
         var gateway = "ws://" + "___serverip___" + "/ws";
         var websocket;
+
+        var webpageVersion = "2.4.2";
+        var firmwareVersion = "loading...";
         var devMode = false;
         var root = document.querySelector(':root');
         var speed;
@@ -78,6 +81,9 @@
             if ("movingTo" in objEsp) {
                 moveToPosition = objEsp.movingTo;
                 moveSliderToPosition();
+            }
+            if ("firmware_version" in objEsp) {
+                document.getElementById("text-version").value = "Webpage version: " + webpageVersion + "<br>Firmware version: " + firmwareVersion;
             }
         }
         
@@ -163,7 +169,7 @@
         }
 
         async function onLoad() {
-            onCloseRestoreConnection();
+            // onCloseRestoreConnection();
             if(getCookie("darkMode") == null) {
                 setCookie("darkMode", "true");
             }
@@ -799,7 +805,7 @@
             </li>
         </ul>
     </div>
-    <div class="text" id="text-version">Version: 2.4.12</div>
+    <div class="text" id="text-version">Webpage version: loading... <br>Firmware version: loading...</div>
     <div class="background" id="bckGrnd"></div>
     <div class="background" id="coverShadow" onclick="sideBarToggle()"></div>
     <div class="control-ui">
