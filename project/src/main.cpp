@@ -375,7 +375,6 @@ void send_ip_to_remote_server() {
 
 void handle_auto() {
   rullgardin.stop();
-  MultiLog.println("Stopping.");
 }
 
 void handle_up() {
@@ -383,7 +382,6 @@ void handle_up() {
   config["movingTo"] = 100;
   sendWebSocket(config);
   rullgardin.open();
-  MultiLog.println("Moving up");
 }
 
 void handle_down() {
@@ -391,20 +389,22 @@ void handle_down() {
   config["movingTo"] = 0;
   sendWebSocket(config);
   rullgardin.close();
-  MultiLog.println("Moving down");
 }
 
 void handle_speed(String url) {
   uint16_t slider_position = url.substring(-1, 7).toInt(); // Remove '/speed/' from url
   
+  StaticJsonDocument<128> config;
+  config["speed"] = slider_position;
+  sendWebSocket(config);
+
   if (rullgardin.set_speed(slider_position)) {
-  #if DEBUG
-    multiLog.println("Setting speed: " + String(slider_position));
-  } else {
-    multiLog.println("Failed setting speed: " + String(slider_position));
-  #else
+    #if DEBUG
+        multiLog.println("Setting speed: " + String(slider_position));
+      } else {
+        multiLog.println("Failed setting speed: " + String(slider_position));
+    #endif
     return;
-  #endif
   }
 }
 
