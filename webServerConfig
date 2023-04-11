@@ -1,4 +1,10 @@
 server {
+    listen 80;
+    server_name wywmctvjiph9s4.duckdns.org www.wywmctvjiph9s4.duckdns.org;
+    return 301 https://wywmctvjiph9s4.duckdns.org$request_uri;
+}
+
+server {
     listen 443 ssl;
 
     server_name wywmctvjiph9s4.duckdns.org www.wywmctvjiph9s4.duckdns.org;
@@ -133,11 +139,12 @@ server {
                 io.input(file)
                 url = io.read()
                 file:close()
+                ngx.log(ngx.STDERR, url)
                 return url
             end
         }
 
-        return 301 "http://${ip}/home";
+        # rewrite ^/(.*)$ http://${ip}/$1 redirect;
 
         # sub_filter_once off;
         # sub_filter "___serverip___" $ip;
