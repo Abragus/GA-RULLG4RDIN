@@ -155,7 +155,12 @@ void loop() {
 bool setup_wifi_success() {
   // If only one network is configured, skip WiFi scan and connect immediately 
   if (sizeof(ssid) / sizeof(ssid[0]) == 1)
-      return connect_wifi_network(ssid[0], password[0], id[0]);    
+      if(connect_wifi_network(ssid[0], password[0], id[0]))
+        goto wifiConnected;
+      else {
+        MultiLog.println("Failed connecting to network: " + String(ssid[0]));
+        return false;
+      }
 
   // Do up to wifi_scan_tries scans
   for (uint8_t s = 0; s < wifi_scan_tries; s++) {
